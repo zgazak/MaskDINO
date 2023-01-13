@@ -343,6 +343,20 @@ def setup(args):
 def main(args):
     cfg = setup(args)
     print("Command cfg:", cfg)
+    
+    from shs.experimentation.modeling import (
+        register_spectracoco_panoptic_annos_semseg as rspas,
+    )
+
+    _root = os.getenv("DETECTRON2_DATASETS", "datasets")
+    try:
+        rspas.register_all_coco_panoptic_annos_sem_seg(_root)
+    except Exception as e:
+        print(str(e))
+
+    
+    
+    
     if args.eval_only:
         model = Trainer.build_model(cfg)
         DetectionCheckpointer(model, save_dir=cfg.OUTPUT_DIR).resume_or_load(
